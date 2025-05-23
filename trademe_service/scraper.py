@@ -59,8 +59,8 @@ async def _child_blocks(page):
 async def _enrich(page, listing):
     url = listing.get("ListingUrl") or f"https://www.trademe.co.nz/a/property/listing/{listing['ListingId']}"
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=5_000)
-        await page.wait_for_selector(BODY_SEL, timeout=5_000)
+        await page.goto(url, wait_until="domcontentloaded", timeout=25_000)
+        await page.wait_for_selector(BODY_SEL, timeout=25_000)
         await page.wait_for_timeout(1200)
         await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
         await page.wait_for_timeout(1200)
@@ -181,8 +181,8 @@ async def run_scrape(pages: int = 1) -> list[dict]:
         async def worker(card):
             async with sem:
                 pg = await browser.new_page()
-                pg.set_default_timeout(5_000)
-                pg.set_default_navigation_timeout(5_000)
+                pg.set_default_timeout(25_000)
+                pg.set_default_navigation_timeout(25_000)
                 await _enrich(pg, card)
                 await pg.close()
 
